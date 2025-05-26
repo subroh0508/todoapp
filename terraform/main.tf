@@ -13,7 +13,7 @@ resource "google_artifact_registry_repository" "main" {
   depends_on = [google_project_service.artifact_registry]
 
   location      = "asia-northeast1"
-  repository_id = var.project
+  repository_id = "todoapp"
   format        = "DOCKER"
 }
 
@@ -23,7 +23,7 @@ locals {
 }
 
 resource "google_service_account" "app" {
-  account_id = "${var.project}-app"
+  account_id = "todoapp-app"
 }
 
 resource "google_project_iam_member" "app" {
@@ -63,7 +63,7 @@ resource "google_cloud_run_v2_service" "main" {
     }
 
     containers {
-      image = "${google_artifact_registry_repository.main.location}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.main.name}/app:latest"
+      image = "${google_artifact_registry_repository.main.location}-docker.pkg.dev/todoapp/${google_artifact_registry_repository.main.name}/app:latest"
       ports {
         container_port = 8080
       }
